@@ -1,5 +1,6 @@
-// models/team.js
-module.exports = (sequelize, DataTypes) => {
+const { DataTypes } = require('sequelize');
+
+module.exports = (sequelize) => {
   const Team = sequelize.define('Team', {
     name: {
       type: DataTypes.STRING,
@@ -12,19 +13,15 @@ module.exports = (sequelize, DataTypes) => {
     founded: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
-        isNumeric: true, // Alleen numerieke waarden toegestaan
-      },
     },
     stadium: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   }, {
-    timestamps: false,  // Zet timestamps uit
+    tableName: 'teams', // Zorg ervoor dat de tabelnaam overeenkomt met de database
+    timestamps: false, // Zet timestamps uit als deze niet in de database staan
   });
 
   return Team;
 };
-
-  
