@@ -92,7 +92,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// GET: Spelers met paginatie
+/* // GET: Spelers met paginatie
 router.get('/paginate', async (req, res) => {
   const { limit, offset } = req.query;
   try {
@@ -102,18 +102,37 @@ router.get('/paginate', async (req, res) => {
     console.error(error); // Voeg deze regel toe om de fout te loggen
     res.status(500).send('Error retrieving players');
   }
-});
+}); */
 
 // GET: Spelers zoeken op naam
 router.get('/search', async (req, res) => {
   const { name } = req.query;
+
+  if (!name) {
+    return res.status(400).json({ message: 'Name query parameter is required' });
+  }
+
   try {
-    const players = await Player.findAll({ where: { name } });
+    const players = await Player.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${name}%`  // Gebruik iLike voor PostgreSQL, like voor andere databases
+        }
+      }
+    });
+
+    if (players.length === 0) {
+      return res.status(404).json({ message: 'No players found' });
+    }
+
     res.json(players);
   } catch (error) {
-    console.error(error); // Voeg deze regel toe om de fout te loggen
+    console.error(error);
     res.status(500).send('Error searching players');
   }
 });
+
+
+
 
 module.exports = router;
