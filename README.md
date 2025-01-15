@@ -48,6 +48,7 @@ Although present in the code, this feature is currently non-functional.
 ## Running the API
 To start the server, use the following command:
 ```bash
+npm install
 node server.js
 ```
 
